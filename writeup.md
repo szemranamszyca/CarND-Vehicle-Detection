@@ -68,7 +68,7 @@ Features were split to train-test set (80%/20%) and normalize. I've decided to t
 
 #### 1. Sliding window search
 
-Final sliding window search could be find at *find_cars.py* and it is used at *process_video.py*. I've decided to searched on three scales using YCrCb 3-channel HOG features.
+Final sliding window search could be find at *find_cars.py* and it is used at *process_video.py*. I've decided to searched on three scales using YCrCb 3-channel HOG features. These settings gave me best result for detecting cars and reduce number of false positive.
 
 ```python3
 ystart_ystop_scale = [(350, 550, 1.5), (400, 620, 2), (440, 700, 2.5)]
