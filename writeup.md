@@ -81,6 +81,7 @@ ystart_ystop_scale = [(350, 550, 1.5), (400, 620, 2), (440, 700, 2.5)]
 Here's example of final result on test image:
 
 ![Final result][test]
+
 ---
 
 ### Video Implementation
