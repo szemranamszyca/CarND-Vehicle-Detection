@@ -19,12 +19,14 @@ The goals / steps of this project are the following:
 [hogcar1]: ./imgs/hog1car.png
 [hognon1]: ./imgs/hog1non.png
 
-[image3]: ./examples/sliding_windows.jpg
-[image4]: ./examples/sliding_window.jpg
-[image5]: ./examples/bboxes_and_heat.png
-[image6]: ./examples/labels_map.png
-[image7]: ./examples/output_bboxes.png
-[video1]: ./project_video.mp4
+
+[scale15]: ./imgs/scale15.png
+[scale2]: ./imgs/scale2.png
+[scale25]: ./imgs/scale25.png
+[test]: ./imgs/finish_test.png
+[heatmap]: ./imgs/heat_example.png
+
+[video1]: ./project_video_output.mp4
 
 ## [Rubric](https://review.udacity.com/#!/rubrics/513/view) Points 
 
@@ -64,48 +66,44 @@ Features were split to train-test set (80%/20%) and normalize. I've decided to t
 
 ### Sliding Window Search
 
-#### 1. Describe how (and identify where in your code) you implemented a sliding window search.  How did you decide what scales to search and how much to overlap windows?
+#### 1. Sliding window search
 
-I decided to search random window positions at random scales all over the image and came up with this (ok just kidding I didn't actually ;):
+Final sliding window search could be find at *find_cars.py* and it is used at *process_video.py*. I've decided to searched on three scales using YCrCb 3-channel HOG features.
 
-![alt text][image3]
+```python3
+ystart_ystop_scale = [(350, 550, 1.5), (400, 620, 2), (440, 700, 2.5)]
+```
 
-#### 2. Show some examples of test images to demonstrate how your pipeline is working.  What did you do to optimize the performance of your classifier?
+![Scale 1.5][scale15]
+![Scale 2][scale2]
+![Scale 2.5][scale2.5]
 
-Ultimately I searched on two scales using YCrCb 3-channel HOG features plus spatially binned color and histograms of color in the feature vector, which provided a nice result.  Here are some example images:
+Here's example of final result on test image:
 
-![alt text][image4]
+![Final result][test]
 ---
 
 ### Video Implementation
 
-####  1. Provide a link to your final video output.  Your pipeline should perform reasonably well on the entire project video (somewhat wobbly or unstable bounding boxes are ok as long as you are identifying the vehicles most of the time with minimal false positives.)
-Here's a [link to my video result](./project_video.mp4)
+####  1. Link to your final video output. 
+Here's a [link to my video result](./project_video_output.mp4)
 
 
 #### 2. Describe how (and identify where in your code) you implemented some kind of filter for false positives and some method for combining overlapping bounding boxes.
 
-I recorded the positions of positive detections in each frame of the video.  From the positive detections I created a heatmap and then thresholded that map to identify vehicle positions.  I then used `scipy.ndimage.measurements.label()` to identify individual blobs in the heatmap.  I then assumed each blob corresponded to a vehicle.  I constructed bounding boxes to cover the area of each blob detected.  
+I recorded the positions of positive detections in each frame of the video.  From the positive detections I created a heatmap and then thresholded that map to identify vehicle positions.  I then used `scipy.ndimage.measurements.label()` to identify individual blobs in the heatmap.  I then assumed each blob corresponded to a vehicle.  I constructed bounding boxes to cover the area of each blob detected.
 
-Here's an example result showing the heatmap from a series of frames of video, the result of `scipy.ndimage.measurements.label()` and the bounding boxes then overlaid on the last frame of video:
+I've created HeatingControl class, where I kept "memory" of ten last frames. After each 10 frames, all fields of class are set to inital state.
 
-### Here are six frames and their corresponding heatmaps:
+Here's example
 
-![alt text][image5]
-
-### Here is the output of `scipy.ndimage.measurements.label()` on the integrated heatmap from all six frames:
-![alt text][image6]
-
-### Here the resulting bounding boxes are drawn onto the last frame in the series:
-![alt text][image7]
-
-
+![Heatmap example][heatmap]
 
 ---
 
-###Discussion
+### Discussion
 
-####1. Briefly discuss any problems / issues you faced in your implementation of this project.  Where will your pipeline likely fail?  What could you do to make it more robust?
+One the video, sometimes false positive windows are visible, especially on the left side of the road. Despite that, nearest cars are always detected correctly. Tuning model parameters might help with that issue.
 
-Here I'll talk about the approach I took, what techniques I used, what worked and why, where the pipeline might fail and how I might improve it if I were going to pursue this project further.  
+Slide window alghorithm had quite poor performance (2frames/second). I thought, that extending my HeatingControl class might be solution for that. I could implement part for "cooling down" and "heating up" part of images and searching cars only in these areas. 
 
