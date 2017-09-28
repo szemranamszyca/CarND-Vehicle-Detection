@@ -76,7 +76,7 @@ ystart_ystop_scale = [(350, 550, 1.5), (400, 620, 2), (440, 700, 2.5)]
 
 ![Scale 1.5][scale15]
 ![Scale 2][scale2]
-![Scale 2.5][scale2.5]
+![Scale 2.5][scale25]
 
 Here's example of final result on test image:
 
