@@ -56,11 +56,16 @@ Here is an example using the `RGB` color space and HOG parameters of `orientatio
 
 #### 2. HOG parameters.
 
-I tried various combinations of parameters and...
+I've extracted features from images with parameters:
 
-#### 3. Describe how (and identify where in your code) you trained a classifier using your selected HOG features (and color features if you used them).
++ color_space='YCrCb'
++ spatial_size=(32, 32
++ hist_bins=32
++ orient=9
++ pix_per_cell=8
++ cell_per_block=2
 
-I trained a linear SVM using...
+Features were split to train-test set (80%/20%) and normalize. I've decided to train SVM linear classifier, and these parameters gave me more than 98% accuracy. To speed-up further work, I've save model and scaler to file using joblib functions.
 
 ### Sliding Window Search
 
