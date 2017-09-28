@@ -54,7 +54,7 @@ def draw_labeled_bboxes(img, labels):
     return img
 
 
-def find_cars(img, ystart, ystop, scale, svc, X_scaler, orient, pix_per_cell, cell_per_block, spatial_size, hist_bins):
+def find_cars(img, ystart, ystop, scale, svc, X_scaler, orient, pix_per_cell, cell_per_block, spatial_size, hist_bins, all_box = False):
     # draw_img = np.copy(img)
     img = img.astype(np.float32)/255
 
@@ -86,6 +86,7 @@ def find_cars(img, ystart, ystop, scale, svc, X_scaler, orient, pix_per_cell, ce
     hog3 = get_hog_features(ch3, orient, pix_per_cell, cell_per_block, feature_vec=False)
 
     box_list = []
+    all_box_list = []
     for xb in range(nxsteps):
         for yb in range(nysteps):
             ypos = yb*cells_per_step
@@ -99,6 +100,8 @@ def find_cars(img, ystart, ystop, scale, svc, X_scaler, orient, pix_per_cell, ce
             xleft = xpos*pix_per_cell
             ytop = ypos*pix_per_cell
 
+
+
             # Extract the image patch
             subimg = cv2.resize(ctrans_tosearch[ytop:ytop+window, xleft:xleft+window], (64,64))
 
@@ -111,25 +114,19 @@ def find_cars(img, ystart, ystop, scale, svc, X_scaler, orient, pix_per_cell, ce
             #test_features = X_scaler.transform(np.hstack((shape_feat, hist_feat)).reshape(1, -1))
             test_prediction = svc.predict(test_features)
 
+            xbox_left = np.int(xleft * scale)
+            ytop_draw = np.int(ytop * scale)
+            win_draw = np.int(window * scale)
             if test_prediction == 1:
-                xbox_left = np.int(xleft*scale)
-                ytop_draw = np.int(ytop*scale)
-                win_draw = np.int(window*scale)
                 box_list.append(((xbox_left, ytop_draw + ystart), (xbox_left + win_draw, ytop_draw + win_draw + ystart)))
-                # cv2.rectangle(draw_img,(xbox_left, ytop_draw+ystart),(xbox_left+win_draw,ytop_draw+win_draw+ystart),(0,0,255),6)
 
+            all_box_list.append(((xbox_left, ytop_draw + ystart), (xbox_left + win_draw, ytop_draw + win_draw + ystart)))
+
+    if all_box:
+        return box_list, all_box_list
     return box_list
-
-ystart = 400
-ystop = 656
-scale = 1.5
-
-# out_img = find_cars(img, ystart, ystop, scale, svc, X_scaler, orient, pix_per_cell, cell_per_block, spatial_size, hist_bins)
-
-# Add heat to each box in box list
 
 
 # Find final boxes from heatmap using label function
-
 # plt.imshow(out_img)
 # plt.show()

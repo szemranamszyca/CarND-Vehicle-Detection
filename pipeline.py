@@ -45,8 +45,6 @@ def train_classifier():
 	scaled_X = X_scaler.transform(X)
 
 
-
-
 	# Split up data into randomized training and test set
 	from sklearn.model_selection import train_test_split
 	X_train, X_test, y_train, y_test = train_test_split(scaled_X, y, test_size=0.2, stratify =y)
