@@ -44,11 +44,6 @@ I started by reading in all the `vehicle` and `non-vehicle` images.  Here is an 
 
 I then explored different color spaces and different `skimage.hog()` parameters (`orientations`, `pixels_per_cell`, and `cells_per_block`).  I grabbed random images from each of the two classes and displayed them to get a feel for what the `skimage.hog()` output looks like.
 
-
-![Car example][car1]
-![Non-car example][non1]
-
-
 Here is an example using the `RGB` color space and HOG parameters of `orientations=9`, `pixels_per_cell=(8, 8)` and `cells_per_block=(2, 2)`:
 
 ![HOG Car example][hogcar1]
